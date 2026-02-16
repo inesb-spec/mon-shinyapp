@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y \
   libxml2-dev \
   && rm -rf /var/lib/apt/lists/*
 
-RUN R -e "install.packages(c('shiny'), repos='https://cloud.r-project.org')"
+# Installer shiny (et forcer l'installation)
+RUN R -e "install.packages('shiny', repos='https://cloud.r-project.org', dependencies=TRUE)"
 
 WORKDIR /app
 COPY . /app
@@ -14,4 +15,3 @@ COPY . /app
 EXPOSE 3838
 
 CMD ["R", "-e", "shiny::runApp('/app', host='0.0.0.0', port=as.numeric(Sys.getenv('PORT', 3838)))"]
-
